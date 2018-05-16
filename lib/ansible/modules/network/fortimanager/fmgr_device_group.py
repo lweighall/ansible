@@ -245,12 +245,12 @@ def delete_group_member(fmg, grp_name, device_member_list, adom, vdom):
 
 def main():
     argument_spec = dict(
-        adom=dict(required=False, type="str"),
-        vdom=dict(required=False, type="str"),
+        adom=dict(required=False, type="str", default="root"),
+        vdom=dict(required=False, type="str", default="root"),
         host=dict(required=True, type="str"),
         username=dict(fallback=(env_fallback, ["ANSIBLE_NET_USERNAME"])),
         password=dict(fallback=(env_fallback, ["ANSIBLE_NET_PASSWORD"]), no_log=True),
-        state=dict(choices=["absent", "param_absent", "present"], type="str"),
+        state=dict(choices=["absent", "present"], type="str", default="present"),
         grp_desc=dict(required=False, type="str"),
         grp_name=dict(required=True, type="str"),
         grp_members=dict(required=False, type="str"),
@@ -266,15 +266,6 @@ def main():
     grp_members = module.params["grp_members"]
     adom = module.params["adom"]
     vdom = module.params["vdom"]
-    # if adom is empty, set to root
-    if adom is None:
-        adom = "root"
-    # if vdom is empty, set to root
-    if vdom is None:
-        vdom = "root"
-    # if state is empty make it "present"
-    if state is None:
-        state = "present"
 
     # validate required arguments are passed; not used in argument_spec to allow params to be called from provider
     # check if params are set
